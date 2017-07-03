@@ -2,21 +2,38 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<title>Socket.IO 客服系统 Demo For SegmentFault QA</title>
-	<link rel="stylesheet" href="style.css" />
+	<title>在线客服</title>
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="-1">
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="stylesheet" href="css/iconfont.css" />
 </head>
 <body>
-	<h1>普通用户的界面</h1>
 	<div class="page">
+		<div class="nav">
+				客服
+		</div>
 		<div class="chatArea"><ul id="messages" class="messages"></ul></div>
-		<form>
-			<input id="inputMessage" class="inputMessage" placeholder="Type here..."/>
-			<input type="submit" style="display:none;">
+		<form  method="post" id="imgform" enctype="multipart/form-data">
+			<a href="javascript:;" class="a-upload">
+    		<input type="file" id="img" name="image"><i class="iconfont icon-img"></i>
+			</a>
+		</form>
+		<form style="position:relative">
+			<textarea id="inputMessage" autofocus class="inputMessage" placeholder="输入您的问题" rows="1" cols="1"></textarea>
+			<button type="submit" class="submitBtn">
+				发送
+			</button>
 		</form>
 	</div>
 
 	<script src="jquery.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
+	<script src="css/iconfont.js"></script>
+	<script type="text/javascript">
+		kefu = false;
+	</script>
 	<script src="main.js"></script>
+
 </body>
 </html>

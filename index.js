@@ -1,9 +1,17 @@
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var port = 8163;
+let express = require('express');
+let app = express();
+let server = require('http').createServer(app);
+let io = require('socket.io')(server);
+let fs = require("fs");
+let bodyParser = require('body-parser');
+let multer  = require('multer');
+let db = require('./mysql');
+let request = require("superagent");
+let id = "";
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(multer({ dest: '/tmp/'}).array('image'));
+let port = 8163
 server.listen(port, function () {
 	console.log('Server listening at port %d', port);
 });
@@ -11,6 +19,28 @@ server.listen(port, function () {
 
 app.use(express.static(__dirname + '/public'));
 
+
+
+app.post('/file_upload', function (req, res) {
+
+   console.log(req.files[0]);  // 上传的文件信息
+
+   var des_file = __dirname + "/public/img/" + req.files[0].originalname;
+   fs.readFile( req.files[0].path, function (err, data) {
+        fs.writeFile(des_file, data, function (err) {
+         if( err ){
+              console.log( err );
+         }else{
+               response = {
+                   message:'success',
+                   filename:req.files[0].originalname
+              };
+          }
+          console.log( response );
+          res.end( JSON.stringify( response ) );
+       });
+   });
+})
 
 var onlineUsers = {},//保存 在线访客/客服 的数据
 	timers = {};//保存计时器, 用于在没有可用客服时, 继续查找 可用的客服
@@ -73,13 +103,14 @@ function tryFindKefuForUid(uid){
 
 function getCurTime(){
 	var t = new Date(),
+		Y = t.getYear()+1900;
 		M = t.getMonth() + 1,
 		D = t.getDate(),
 		H = t.getHours(),
 		m = t.getMinutes(),
 		s = t.getSeconds();
 
-	return [M, '-', D, ' ', H, ':', m, ':', s].join('');
+	return [Y,'-',M, '-', D, ' ', H, ':', m, ':', s].join('');
 }
 
 function log(){
@@ -100,9 +131,12 @@ function addUser(data){
 		this.emit('error');
 		return;
 	}
-
+    if(id){
+	    this.uid = uid;
+    }else{
+        this.uid = uid;
+    }
 	//将 UID 记录至当前的 socket 中, 以便在 disconnect 时使用
-	this.uid = uid;
 
 	onlineUsers[uid] = {
 		uid: uid,
@@ -141,7 +175,7 @@ function removeUser(){
 		switch(user.type){
 			case 1://客服
 				if(target.socket){
-					target.socket.emit('log', '客服已退出会话!');
+					target.socket.emit('log', '客服已退出会话!请刷新');
 					target.socket.emit('error');
 				}
 				break;
@@ -150,6 +184,7 @@ function removeUser(){
 
 				if(target.socket){//告诉客服和你会话的这个人,关闭了连接
 					target.socket.emit('log', '访客已关闭会话');
+					target.socket.emit('log', getCurTime());
 				}
 				break;
 		}
@@ -173,15 +208,33 @@ function onMessage(data){
 		message = data.message,
 		user = onlineUsers[uid];
 
-
+	var kefuId,userId;
 	//没有UID, 或者UID是无效的, 或者这个用户没有与之关联的那个人, 或者 没有消息, 则什么也不做
 	if(!uid || !user || !user.target || !message){
 		return;
 	}
 
-	log(user.name, ':', message);
+	if(user.type===1){//user是客服
+	    kefuId = user.uid;
+	    userId = user.target.uid;
+    }else{
+	    //在用户给客服发信息的时候发邮件
+	    kefuId = user.target.uid;
+	    userId = user.uid;
+        sendEmail(kefuId,userId,message);
+    }
+    var sql = 'insert into message(userid,kefuid,message) VALUES(?,?,?)';
+	var paramer=[userId,kefuId,message];
+    db.exec(sql,paramer,function (err,result) {
+        if(!err){
+            log(result);
+        }else{
+            log(err);
+        }
+    })
 
-	//将消息转发到与当前用户对应的那个人身上 =,=
+	log(user.name, ':', message);
+	//将消息转发到与当前用户对应的那个人身上
 	user.target.socket.emit('new message', {username:user.name, message: message});
 }
 
@@ -200,6 +253,15 @@ function onError(e){
 	}
 }
 
+function sendEmail(kefuId,userId,message) {
+    request
+        .get('http://localhost:8080/bowei/admin/admin/sendEmail4kefu.html')
+        .query({"kefuId":kefuId}).query({"userId":userId}).query({"message":message})
+        .end(function(err,res){
+            var obj = JSON.parse(res.text);
+            log(obj.result);
+        });
+}
 
 io.on('connection', function (socket) {
 	//连接成功后, 用户登陆
