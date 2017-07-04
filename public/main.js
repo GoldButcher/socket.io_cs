@@ -51,6 +51,26 @@
                     socket.emit('login', {name:username, id:userid, type: isKF ? 1 : 0});
                 });
             })
+        }else{
+            userid = id || (Math.random().toString().substr(3, isKF ? 5 : 8) * 10000);
+            //生成昵称
+            if(!username){
+                username = (isKF ? '客服' : '访客') + '(' + userid + ')';
+            }
+            // userid = new Date().getTime() + '.' + userid.toString(32);
+
+            //将生成的昵称和id保存至 window.name 中, 这样在不关闭窗口的情况下, 保证一直是同一个昵称和id
+            window.name = [username, userid].join('|');
+            //目前这些数据是随机生成的, 仅做DEMO使用, 在真实情况下, 请根据自己的需求进行修改
+            log('正在连接服务器...');
+
+
+
+            socket.on('connect', function(){
+                connected = true;
+                //连接成功后, 向服务器发送 登陆请求, 传递用户名和userid
+                socket.emit('login', {name:username, id:userid, type: isKF ? 1 : 0});
+            });
         }
 	}
 
