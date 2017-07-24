@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script src="jquery.min.js"></script>
+<script>
+    $.ajax({
+        url:"http://localhost:8080/bowei/admin/admin/login4kefu.html",
+        dataType:"JSONP",
+        type:"POST",
+        data:{"username":"admin","password":"123456"},
+        jsonp:"callback",
+        success:function(data){
+            alert(data)
+        },
+        error: function(XMLHttpRequest, textStatus) {
+            alert("服务器错误,请重试!");
+        }
+    })
+</script>
+</html>

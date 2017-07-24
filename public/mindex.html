@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>在线客服</title>
+    <meta name="viewport"   content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <link rel="stylesheet" href="css/mstyle.css" />
+    <link rel="stylesheet" href="css/iconfont.css" />
+    <script src="jquery.min.js"></script>
+    <script src="rem.js"></script>
+</head>
+<body>
+<div class="nav">
+    客服
+</div>
+<div class="page">
+    <div class="chatArea"><ul id="messages" class="messages"></ul></div>
+</div>
+<form class="msg-form">
+    <textarea id="inputMessage" class="inputMessage"  rows="1" cols="1"></textarea>
+    <button type="submit" class="submitBtn">
+        发送
+    </button>
+</form>
+<script src="/socket.io/socket.io.js"></script>
+<script src="css/iconfont.js"></script>
+<script type="text/javascript">
+    kefu = false;
+</script>
+<script src="main.js"></script>
+
+</body>
+</html>

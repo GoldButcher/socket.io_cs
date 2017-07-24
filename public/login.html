@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="cache-control" content="no-cache">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Thinks for use</title>
+
+    <link href="css/amazeui.min.css" rel="stylesheet">
+
+    <style media="screen">
+        //    input:-webkit-autofill {
+        //	-webkit-box-shadow: 0 0 0px 1000px white inset;
+        //	border: 1px solid #CCC!important;
+        //	}
+        .header {
+            text-align: center;
+            padding-top : 30px;
+        }
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+        .header p {
+            font-size: 14px;
+        }
+        div.login-alert{
+            display:none;
+            background-color: #b94a48;
+            position: absolute;
+            width:30%;
+            height:50px;
+            text-align: center;
+            margin:0 35%;
+        }
+    </style>
+</head>
+<body>
+<div class="am-alert am-alert-danger login-alert">
+    <button type="button" class="am-close">&times;</button>
+    <p></p>
+</div>
+<div class="header">
+    <div class="am-g">
+        <h1>客服登录</h1>
+    </div>
+    <hr />
+</div>
+<div class="am-g">
+    <div class="am-u-lg-4 am-u-md-8 am-u-sm-centered">
+        <form method="post" class="am-form" autocomplete="off" style="position: relative">
+
+            <label for="username">用户名:</label>
+            <input type="text" name="username" id="username" value=""  >
+            <br>
+            <label for="password">密码:</label>
+            <input type="password" name="password" id="password" autocomplete="new-password">
+            <br>
+            <div class="am-cf" style="right: 0;position: absolute">
+                <input type="button" value="登陆" class="am-btn am-btn-default am-btn-sm login" style="margin-right: 20px;outline:none">
+                <input type="button" value="注册" class="am-btn am-btn-default am-btn-sm register" style="outline:none">
+            </div>
+        </form>
+    </div>
+</div>
+<script src="jquery.min.js"></script>
+<script type="text/javascript">
+    var $login = $(".login");
+    $login.on("click",function () {
+        var username = $("#username").val()||"";
+        var password = $("#password").val()||"";
+        $.getJSON("http://localhost:8080/bowei/admin/admin/login4kefu.html?jsoncallback=?",
+            {"username":username,"password":password},function (data) {
+                    if(data.result=="success"){
+                        window.location.href="/kefu.html?id="+data.id;
+                    }else{
+                        alert("网络错误!");
+                    }
+            }).error(function (data) {
+                alert("网络错误!");
+        })
+//        $.ajax({
+//            url:"http://localhost:8080/bowei/admin/admin/login4kefu.html",
+//            dataType:"JSONP",
+//            type:"POST",
+//            data:{"username":username,"password":password},
+//            jsonp:"callback",
+//            jsonpCallback:"flightHandler",
+//            success:function(data){
+//                alert(data);
+//                if(data.result=="success"){
+//                    window.location.href = "/kefu.html?id="+data.id;
+//                }else {
+//                    alert("服务器错误,请重试!");
+//                }
+//            },
+//            error: function(XMLHttpRequest, textStatus) {
+//                alert("服务器错误,请重试!");
+//            }
+//        })
+    })
+
+</script>
+</body>
+</html>

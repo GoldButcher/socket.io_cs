@@ -1,0 +1,155 @@
+/* Fix user-agent */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+html, input {
+  font-family:
+    "HelveticaNeue-Light",
+    "Helvetica Neue Light",
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    "Lucida Grande",
+    sans-serif;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #eee;
+  overflow:hidden;
+  font-size: 12px;
+}
+
+h1{text-align:center;}
+
+ul {
+  list-style: none;
+  word-wrap: break-word;
+}
+
+.page{
+	position:relative;
+	width: 500px;
+	height: 500px;
+	margin: 40px auto;
+	border-radius: 5px;
+	background-color: #fff;
+}
+
+.log {
+  color: gray;
+  margin: 5px;
+  text-align: center;
+}
+
+/* Messages */
+
+.chatArea {
+  height: 100%;
+  padding-bottom: 130px;
+
+}
+
+.messages {
+  height: 100%;
+  margin: 0;
+  padding: 10px 20px 10px 15px;
+  overflow-y: auto;
+  color:#333;
+}
+
+.message{padding: 2px;}
+
+.username{margin-right: 6px;}
+
+.messageBody{
+margin: 2px;
+display: inline-block;
+/* width: 130px; */
+padding: 8px;
+border: 1px solid #bbb;
+text-align: left;
+border-radius: 6px;
+background: #D8E8F9;
+font-size: 14px;
+}
+
+.messageBody img{
+    width: 100px;
+    height: 100px;
+}
+
+/* Input */
+
+.inputMessage {
+    bottom: 0;
+    height: 100px;
+    left: 0;
+    outline: none;
+    padding-left: 10px;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    white-space: pre-wrap;
+    overflow: hidden;
+    word-break: break-all;
+    font-size: 14px;
+    font-family: inherit;
+    border: none;
+}
+.submitBtn{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 10px 25px;
+  background-color: #b42b2a;
+  font-size: 16px;
+  border: none;
+  color: #f3f3f3;
+  cursor: pointer;
+}
+.nav{
+  color: #000;
+  height: 40px;
+  border-bottom: 1px solid #bbb;
+  padding: 10px 0 0 10px;
+  font-size: 15px;
+}
+
+.a-upload {
+    padding: 4px 10px;
+    height: 25px;
+    position: relative;
+    cursor: pointer;
+    color: #888;
+    background: #ffffff;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+    border-top: 1px solid #bbb;
+}
+
+.a-upload  input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+#imgform{
+    position: absolute;
+    bottom: 60px;
+    width: 100%;
+    border-color: #ffffff;
+}
